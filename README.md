@@ -39,7 +39,7 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
      ```
 4. **Run the bot:**
    ```sh
-   python bot.py
+   python Audio-Curl-Bot.py
    ```
 
 ## Usage
