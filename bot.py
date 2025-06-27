@@ -4,6 +4,9 @@ from discord import app_commands
 import yt_dlp
 import asyncio
 from typing import Optional
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -165,4 +168,4 @@ async def leave(interaction: discord.Interaction):
     else:
         await interaction.response.send_message("I'm not in a voice channel.", ephemeral=True)
 
-bot.run("YOUR_BOT_TOKEN")
+bot.run(os.getenv("DISCORD_BOT_TOKEN"))
