@@ -1,6 +1,7 @@
 import discord
 import yt_dlp
 import asyncio
+import random
 from discord import app_commands
 from .core import bot, tree
 from .queue import Song, queues, ensure_queue
@@ -137,3 +138,25 @@ async def leave(interaction: discord.Interaction):
             await interaction.response.send_message("I'm not in a voice channel.", ephemeral=True)
     except Exception as e:
         await interaction.response.send_message(f"❌ Failed to leave voice channel: {e}", ephemeral=True)
+
+@tree.command(name="shuffle", description="Shuffle the current song queue")
+async def shuffle(interaction: discord.Interaction):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    songs = queue.get("songs", [])
+    if len(songs) < 2:
+        await interaction.response.send_message("Need at least two songs in the queue to shuffle.", ephemeral=True)
+        return
+    random.shuffle(songs)
+    await interaction.response.send_message("🔀 The queue has been shuffled!")
+
+@tree.command(name="clear_queue", description="Clear all songs from the queue")
+async def clear_queue(interaction: discord.Interaction):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    if not queue["songs"]:
+        await interaction.response.send_message("The queue is already empty.", ephemeral=True)
+        return
+    queue["songs"].clear()
+    await interaction.response.send_message("🗑️ The song queue has been cleared.", ephemeral=True)
+
