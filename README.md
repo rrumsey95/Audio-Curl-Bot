@@ -41,6 +41,19 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
    ```sh
    python Audio-Curl-Bot.py
    ```
+## Directory and File Structure 
+      Audio-Curl-Bot/
+   │
+   ├── bot/
+   │   ├── __init__.py
+   │   ├── core.py
+   │   ├── queue.py
+   │   └── commands.py
+   ├── Audio-Curl-Bot.py
+   ├── requirements.txt
+   ├── .env
+   └── ...
+
 
 ## Usage
 
