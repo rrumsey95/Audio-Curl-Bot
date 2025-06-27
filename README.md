@@ -10,12 +10,15 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
 - Skip, pause, and resume playback with `/skip`, `/pause`, and `/resume`
 - Leave the voice channel and clear the queue with `/leave`
 - Per-guild song queues
+- Error handling for voice and playback operations
+- Checks to prevent duplicate voice connections
 
 ## Requirements
 
 - Python 3.8+
 - FFmpeg (must be installed and available in your system PATH)
 - Discord bot token
+- [python-dotenv](https://pypi.org/project/python-dotenv/) (for loading environment variables)
 
 ## Installation
 
@@ -46,6 +49,11 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
 - Use the `/play_playlist` command followed by a YouTube playlist URL to play a playlist.
 - Manage the song queue with `/queue`, `/skip`, `/pause`, and `/resume`.
 - Use the `/leave` command to make the bot leave the voice channel and clear the queue.
+
+## Improvements
+
+- The bot now includes error handling for joining and leaving voice channels, providing user-friendly error messages.
+- The bot checks if it is already connected or disconnected before attempting to join or leave a voice channel, preventing duplicate connections or errors.
 
 ## Contributing
 
