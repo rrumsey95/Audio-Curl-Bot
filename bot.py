@@ -48,13 +48,21 @@ async def on_ready():
 @tree.command(name="join", description="Join your voice channel")
 async def join(interaction: discord.Interaction):
     await ensure_queue(interaction.guild.id)
-    if interaction.user.voice:
-        channel = interaction.user.voice.channel
-        vc = await channel.connect()
-        queues[interaction.guild.id]["vc"] = vc
-        await interaction.response.send_message("🎤 Joined your voice channel!")
-    else:
-        await interaction.response.send_message("You need to join a voice channel first.", ephemeral=True)
+    queue = queues[interaction.guild.id]
+    try:
+        # Voice connection check: Only connect if not already connected
+        if queue["vc"] and queue["vc"].is_connected():
+            await interaction.response.send_message("I'm already connected to a voice channel.", ephemeral=True)
+            return
+        if interaction.user.voice:
+            channel = interaction.user.voice.channel
+            vc = await channel.connect()
+            queues[interaction.guild.id]["vc"] = vc
+            await interaction.response.send_message("🎤 Joined your voice channel!")
+        else:
+            await interaction.response.send_message("You need to join a voice channel first.", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Failed to join voice channel: {e}", ephemeral=True)
 
 @tree.command(name="play_playlist", description="Play a YouTube playlist")
 @app_commands.describe(url="YouTube playlist URL")
@@ -159,13 +167,17 @@ async def view_queue(interaction: discord.Interaction):
 @tree.command(name="leave", description="Disconnect the bot")
 async def leave(interaction: discord.Interaction):
     queue = queues.get(interaction.guild.id)
-    if queue and queue.get("vc"):
-        await queue["vc"].disconnect()
-        queue["vc"] = None
-        queue["songs"].clear()
-        queue["playing"] = False
-        await interaction.response.send_message("👋 Left the voice channel and cleared the queue.")
-    else:
-        await interaction.response.send_message("I'm not in a voice channel.", ephemeral=True)
+    try:
+        # Voice connection check: Only disconnect if connected
+        if queue and queue.get("vc") and queue["vc"].is_connected():
+            await queue["vc"].disconnect()
+            queue["vc"] = None
+            queue["songs"].clear()
+            queue["playing"] = False
+            await interaction.response.send_message("👋 Left the voice channel and cleared the queue.")
+        else:
+            await interaction.response.send_message("I'm not in a voice channel.", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Failed to leave voice channel: {e}", ephemeral=True)
 
 bot.run(os.getenv("DISCORD_BOT_TOKEN"))
