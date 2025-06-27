@@ -50,14 +50,18 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
 - Manage the song queue with `/queue`, `/skip`, `/pause`, and `/resume`.
 - Use the `/leave` command to make the bot leave the voice channel and clear the queue.
 
-## Improvements
-
-- The bot now includes error handling for joining and leaving voice channels, providing user-friendly error messages.
-- The bot checks if it is already connected or disconnected before attempting to join or leave a voice channel, preventing duplicate connections or errors.
-
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any bugs, features, or improvements.
+Contributions are welcome! Please see the [CONTRIBUTING.md](.github/CONTRIBUTING.md) file for guidelines on how to contribute, including how to set up your development environment, coding standards, and the pull request process.
+
+- Use [GitHub Issues](../../issues) for feature requests and bug reports.
+- For security issues, please refer to the [SECURITY.md](.github/SECURITY.md) file and report vulnerabilities privately.
+- All contributors are expected to follow the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+
+## Issue and Pull Request Templates
+
+- When opening a new issue, please use the provided [bug report](.github/ISSUE_TEMPLATE/bug_report.md) or [feature request](.github/ISSUE_TEMPLATE/feature_request.md) templates.
+- Pull requests should use the [pull request template](.github/PULL_REQUEST_TEMPLATE.md) and ensure all checklist items are addressed.
 
 ## License
 
