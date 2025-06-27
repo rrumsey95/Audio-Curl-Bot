@@ -11,18 +11,19 @@ async def join(interaction: discord.Interaction):
     await ensure_queue(interaction.guild.id)
     queue = queues[interaction.guild.id]
     try:
+        await interaction.response.defer(ephemeral=True)  # Acknowledge the interaction early
         if queue["vc"] and queue["vc"].is_connected():
-            await interaction.response.send_message("I'm already connected to a voice channel.", ephemeral=True)
+            await interaction.followup.send("I'm already connected to a voice channel.", ephemeral=True)
             return
         if interaction.user.voice:
             channel = interaction.user.voice.channel
             vc = await channel.connect()
             queues[interaction.guild.id]["vc"] = vc
-            await interaction.response.send_message("🎤 Joined your voice channel!")
+            await interaction.followup.send("🎤 Joined your voice channel!")
         else:
-            await interaction.response.send_message("You need to join a voice channel first.", ephemeral=True)
+            await interaction.followup.send("You need to join a voice channel first.", ephemeral=True)
     except Exception as e:
-        await interaction.response.send_message(f"❌ Failed to join voice channel: {e}", ephemeral=True)
+        await interaction.followup.send(f"❌ Failed to join voice channel: {e}", ephemeral=True)
 
 @tree.command(name="play_playlist", description="Play a YouTube playlist")
 @app_commands.describe(url="YouTube playlist URL")
