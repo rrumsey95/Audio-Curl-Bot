@@ -9,7 +9,7 @@ resource "aws_security_group" "bot_networking" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "bot_networking_http_ipv4" {
   security_group_id = aws_security_group.bot_networking.id
   cidr_ipv4         = aws_vpc.audio-curl-bot-vpc.cidr_block
   from_port         = 80
@@ -17,7 +17,7 @@ resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv4" {
   to_port           = 80
 }
 
-resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv6" {
+resource "aws_vpc_security_group_ingress_rule" "bot_networking_http_ipv6" {
   security_group_id = aws_security_group.bot_networking.id
   cidr_ipv6         = aws_vpc.audio-curl-bot-vpc.ipv6_cidr_block
   from_port         = 80
@@ -25,7 +25,7 @@ resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv6" {
   to_port           = 80
 }
 
-resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "bot_networking_https_ipv4" {
   security_group_id = aws_security_group.bot_networking.id
   cidr_ipv4         = aws_vpc.audio-curl-bot-vpc.cidr_block
   from_port         = 443
@@ -33,7 +33,7 @@ resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv4" {
   to_port           = 443
 }
 
-resource "aws_vpc_security_group_ingress_rule" "bot_networking_ipv6" {
+resource "aws_vpc_security_group_ingress_rule" "bot_networking_https_ipv6" {
   security_group_id = aws_security_group.bot_networking.id
   cidr_ipv6         = aws_vpc.audio-curl-bot-vpc.ipv6_cidr_block
   from_port         = 443
