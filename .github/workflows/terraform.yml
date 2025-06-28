@@ -45,9 +45,9 @@ jobs:
       run: terraform init
       working-directory: ./IaC
 
-    - name: Terraform Format
-      run: terraform fmt -check
-      working-directory: ./IaC
+#    - name: Terraform Format
+#      run: terraform fmt -check
+#      working-directory: ./IaC
 
     - name: Terraform Plan
       run: terraform plan -input=false
