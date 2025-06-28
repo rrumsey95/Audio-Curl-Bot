@@ -3,7 +3,14 @@ name: 'Terraform'
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'IaC/**'
+      - '.github/workflows/terraform.yml'
   pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'IaC/**'
+      - '.github/workflows/terraform.yml'
 
 permissions:
   contents: read
