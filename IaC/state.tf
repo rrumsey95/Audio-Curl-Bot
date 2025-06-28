@@ -1,10 +1,10 @@
 resource "aws_s3_bucket" "audio_curl_bot_bucket" {
-  bucket = "audio_curl_bot-state-bucket"
+  bucket = "audio-curl-bot-state-bucket"
 
   force_destroy = false
 
   tags = {
-    Name        = "audio_curl_bot-state-bucket"
+    Name        = "audio-curl-bot-state-bucket"
     Environment = "prod"
   }
 }
