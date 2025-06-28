@@ -34,6 +34,25 @@ install_stuff() {
     log "For Nginx, you can find the configuration files in /etc/nginx/nginx.conf and /etc/nginx/sites-available/"
 }
 
+docker_app_setup() {
+    log "Pulling latest Audio-Curl-Bot Docker image..."
+    sudo docker pull rrumsey95/audio-curl-bot:latest
+    
+    if [[ $? -ne 0 ]]; then
+        log "Failed to pull Docker image. Please check your Docker setup."
+        exit 1
+    fi
+
+    log "Starting Audio-Curl-Bot container..."
+    sudo docker run -d \
+        --name audio-curl-bot \
+        --restart unless-stopped \
+        --env-file /home/ubuntu/.env \
+        rrumsey95/audio-curl-bot:latest
+
+    log "Docker application setup complete."
+}
+
 # Main
 if [[ $EUID -ne 0 ]]; then
     log "Please run as root or with sudo."
@@ -41,3 +60,5 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 install_stuff
+docker_app_setup
+log "All setup tasks completed successfully."
