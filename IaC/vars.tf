@@ -8,6 +8,18 @@ variable "ec2_ami" {
   default = "ami-034568121cfdea9c3" // double check to make sure this is the most recent Ubuntu 22.04 LTS AMI for your AWS Region
 }
 
+variable "ec2_key_name_putty" {
+  type        = string
+  description = "Name of the EC2 key pair for SSH access via putty"
+  default     = "audio-curl-bot-putty"
+}
+
+variable "ec2_key_name_key" {
+  type        = string
+  description = "Name of the EC2 key pair for SSH access via key pair"
+  default     = "audio-curl-bot-key"
+}
+
 variable "public_subnet_cidrs" {
  type        = list(string)
  description = "Public Subnet CIDR values"
