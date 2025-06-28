@@ -1,3 +1,4 @@
+/*
 resource "aws_s3_bucket" "audio_curl_bot_bucket" {
   bucket = "audio-curl-bot-state-bucket"
 
@@ -8,7 +9,7 @@ resource "aws_s3_bucket" "audio_curl_bot_bucket" {
     Environment = "prod"
   }
 }
-
+*/
 resource "aws_s3_bucket_versioning" "audio_curl_bot_bucket_versioning" {
   bucket = aws_s3_bucket.audio_curl_bot_bucket.id
   versioning_configuration {
