@@ -1,4 +1,10 @@
 /*
+// This file is used to manage the state of the Audio Curl Bot application using Terraform.
+// It defines the backend configuration for storing the Terraform state in an S3 bucket.
+// The S3 bucket is configured to be encrypted and has versioning enabled for state management.
+// The state.tf file is commented out due to being needed for the initial setup of the S3 bucket but not later on.
+*/
+/*
 resource "aws_s3_bucket" "audio_curl_bot_bucket" {
   bucket = "audio-curl-bot-state-bucket"
 
@@ -9,7 +15,7 @@ resource "aws_s3_bucket" "audio_curl_bot_bucket" {
     Environment = "prod"
   }
 }
-*/
+
 resource "aws_s3_bucket_versioning" "audio_curl_bot_bucket_versioning" {
   bucket = aws_s3_bucket.audio_curl_bot_bucket.id
   versioning_configuration {
@@ -46,3 +52,4 @@ resource "aws_s3_bucket_acl" "audio_curl_bot_bucket_private_acl" {
   bucket     = aws_s3_bucket.audio_curl_bot_bucket.id
   acl        = "private"
 }
+*/
