@@ -1,5 +1,5 @@
 resource "aws_instance" "audio-curl-bot-ec2" {
-  ami = var.ec2_ami
+  ami = var.ubuntu_image_id
   instance_type = "t2.micro"
   user_data = file("audio-curl-bot-ec2-user-data.sh")
   subnet_id = aws_subnet.public_subnets[0].id

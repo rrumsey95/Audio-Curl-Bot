@@ -3,9 +3,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "ec2_ami" {
-  type    = string
-  default = "ami-034568121cfdea9c3" // double check to make sure this is the most recent Ubuntu 22.04 LTS AMI for your AWS Region
+variable "ubuntu_image_id" {
+  type = string
+  default = "ubuntu-latest" # Or a more specific identifier if needed
+  description = "The ID of the Ubuntu image to use."
 }
 
 variable "ec2_key_name_putty" {
