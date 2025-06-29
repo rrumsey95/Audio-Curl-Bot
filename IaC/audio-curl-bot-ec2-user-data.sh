@@ -55,6 +55,23 @@ docker_app_setup() {
     log "Docker application setup complete."
 }
 
+running_stuff_locally() {
+    git clone https://github.com/rrumsey95/Audio-Curl-Bot.git
+    python3 -m venv .venv
+    source .venv/bin/activate
+    log "Installing Python dependencies..."
+    python3 -m pip install -r requirements.txt
+    log "Python dependencies installed."
+    log "Making sure the python files are executable..."
+    chmod +x /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
+    chmod +x /home/ubuntu/Audio-Curl-Bot/src/bot/__init__.py 
+    chmod +x /home/ubuntu/Audio-Curl-Bot/src/bot/commands.py  
+    chmod +x /home/ubuntu/Audio-Curl-Bot/src/bot/core.py  
+    chmod +x /home/ubuntu/Audio-Curl-Bot/src/bot/queue.py
+    log "Starting the bot..."
+    python3 /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
+}
+
 # Main
 if [[ $EUID -ne 0 ]]; then
     log "Please run as root or with sudo."
@@ -62,5 +79,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 install_stuff
-docker_app_setup
+# docker_app_setup
+running_stuff_locally
 log "All setup tasks completed successfully."
