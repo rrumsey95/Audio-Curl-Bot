@@ -25,14 +25,14 @@ install_stuff() {
     sudo apt-get install -y certbot 
     sudo apt-get install -y python3-certbot-nginx
 
-    log "Enabling and starting Docker and Nginx..."
-    sudo systemctl enable docker
-    sudo systemctl start docker
-    sudo systemctl enable nginx
-    sudo systemctl start nginx
+    # log "Enabling and starting Docker and Nginx..."
+    # sudo systemctl enable docker
+    # sudo systemctl start docker
+    # sudo systemctl enable nginx
+    # sudo systemctl start nginx
 
-    log "Adding ubuntu user to docker group..."
-    sudo usermod -aG docker ubuntu
+    # log "Adding ubuntu user to docker group..."
+    # sudo usermod -aG docker ubuntu
 
     log "Docker and Nginx services are enabled and started."
     log "Installation complete. You can now configure your services."
