@@ -66,6 +66,6 @@ resource "aws_eip" "audio-curl-bot-eip" {
   domain = "vpc"
 
   instance                  = aws_instance.audio-curl-bot-ec2.id
-  associate_with_private_ip = "10.0.0.12"
+  // associate_with_private_ip = "10.0.0.12"
   depends_on                = [aws_internet_gateway.gw]
 }
