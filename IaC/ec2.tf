@@ -12,5 +12,6 @@ resource "aws_instance" "audio-curl-bot-ec2" {
   tags = {
     Name = "audio-curl-bot-ec2"
     env = "prod"
+    project = "audio-curl-bot"
   }
 }
