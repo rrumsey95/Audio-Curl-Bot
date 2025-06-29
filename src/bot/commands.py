@@ -2,9 +2,12 @@ import discord
 import yt_dlp
 import asyncio
 import random
+import os
 from discord import app_commands
 from .core import bot, tree
 from .queue import Song, queues, ensure_queue
+
+COOKIES_FILE = os.getenv("YTDLP_COOKIES", "cookies.txt")  # You can set this in your .env
 
 @tree.command(name="join", description="Join your voice channel")
 async def join(interaction: discord.Interaction):
@@ -40,6 +43,7 @@ async def play_playlist(interaction: discord.Interaction, url: str):
         'quiet': True,
         'extract_flat': 'in_playlist',
         'force_generic_extractor': True,
+        'cookiesfromfile': COOKIES_FILE if os.path.exists(COOKIES_FILE) else None,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -71,7 +75,8 @@ async def play_next(guild_id):
     stream_opts = {
         'format': 'bestaudio',
         'quiet': True,
-        'noplaylist': True
+        'noplaylist': True,
+        'cookiesfromfile': COOKIES_FILE if os.path.exists(COOKIES_FILE) else None,
     }
 
     with yt_dlp.YoutubeDL(stream_opts) as ydl:
