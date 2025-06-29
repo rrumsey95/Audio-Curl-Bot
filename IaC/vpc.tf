@@ -62,7 +62,7 @@ resource "aws_route_table_association" "public_subnet_asso" {
  route_table_id = aws_route_table.second_rt.id
 }
 
-resource "aws_eip" "bar" {
+resource "aws_eip" "audio-curl-bot-eip" {
   domain = "vpc"
 
   instance                  = aws_instance.audio-curl-bot-ec2.id
