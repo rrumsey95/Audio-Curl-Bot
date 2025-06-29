@@ -1,4 +1,5 @@
 discord.py
+PyNaCl
 yt_dlp
 asyncio
 dotenv
