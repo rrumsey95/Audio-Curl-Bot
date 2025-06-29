@@ -5,7 +5,11 @@ variable "aws_region" {
 
 variable "ubuntu_image_id" {
   type = string
-  default = "ubuntu-latest" # Or a more specific identifier if needed
+  default = "ami-020cba7c55df1f615" # This is an example AMI ID for Ubuntu 20.04 in us-east-1; update as needed.
+  validation {
+    condition     = can(regex("^ami-[a-z0-9]+$", var.ubuntu_image_id))
+    error_message = "The Ubuntu image ID must be in the format ami-xxxxxxxxxxxx."
+  }
   description = "The ID of the Ubuntu image to use."
 }
 
