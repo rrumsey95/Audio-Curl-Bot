@@ -12,7 +12,8 @@ install_stuff() {
     log "Installing required packages..."
     sudo apt-get install -y python3 
     sudo apt-get install -y python3-pip 
-    sudo apt-get install -y python3-venv 
+    sudo apt-get install -y python3-venv
+    sudo apt-get install -y pipx 
     sudo apt-get install -y ffmpeg 
     sudo apt-get install -y wget 
     sudo apt-get install -y curl 
@@ -57,10 +58,10 @@ docker_app_setup() {
 
 running_stuff_locally() {
     git clone https://github.com/rrumsey95/Audio-Curl-Bot.git
-    python3 -m venv .venv
+    sudo python3 -m venv .venv
     source .venv/bin/activate
     log "Installing Python dependencies..."
-    python3 -m pip install -r requirements.txt
+    sudo python3 -m pip install -r /home/ubuntu/Audio-Curl-Bot/requirements.txt
     log "Python dependencies installed."
     log "Making sure the python files are executable..."
     chmod +x /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
