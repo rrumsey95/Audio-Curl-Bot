@@ -11,6 +11,7 @@ install_stuff() {
 
     log "Installing required packages..."
     sudo apt-get install -y python3 
+    sudo apt-get install -y python3-full
     sudo apt-get install -y python3-pip 
     sudo apt-get install -y python3-venv
     sudo apt-get install -y pipx 
@@ -62,6 +63,9 @@ running_stuff_locally() {
     source .venv/bin/activate
     log "Installing Python dependencies..."
     sudo python3 -m pip install -r /home/ubuntu/Audio-Curl-Bot/requirements.txt
+    
+    sudo pipx install yt_dlp
+
     log "Python dependencies installed."
     log "Making sure the python files are executable..."
     chmod +x /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
