@@ -12,9 +12,11 @@ install_stuff() {
     log "Installing required packages..."
     sudo apt-get install -y python3 
     sudo apt-get install -y python3-full
+    sudo apt-get install -y python3-dev
     sudo apt-get install -y python3-pip 
     sudo apt-get install -y python3-venv
     sudo apt-get install -y pipx 
+    sudo apt-get install -y build-essential 
     sudo apt-get install -y ffmpeg 
     sudo apt-get install -y wget 
     sudo apt-get install -y curl 
@@ -22,6 +24,15 @@ install_stuff() {
     sudo apt-get install -y unzip 
     sudo apt-get install -y nginx 
     sudo apt-get install -y docker.io
+    sudo apt-get install -y docker-compose
+    sudo apt-get install -y git
+    sudo apt-get install -y software-properties-common 
+
+    sudo apt install -y libffi-dev 
+    sudo apt install -y libnacl-dev 
+    sudo apt install -y libssl-dev
+    sudo add-apt-repository -y ppa:deadsnakes/ppa
+    sudo apt install python3.8 python3.8-dev python3.8-venv python3-pip -y
 
     log "Installing Certbot..."
     sudo apt-get install -y certbot 
@@ -44,7 +55,7 @@ install_stuff() {
 
 docker_app_setup() {
     log "Pulling latest Audio-Curl-Bot Docker image..."
-    sudo docker pull rrumsey95/audio-curl-bot:latest
+    docker pull rrumsey95/audio-curl-bot:latest
     
     if [[ $? -ne 0 ]]; then
         log "Failed to pull Docker image. Please check your Docker setup."
@@ -52,20 +63,25 @@ docker_app_setup() {
     fi
 
     log "Starting Audio-Curl-Bot container..."
-    sudo docker run -d --name audio-curl-bot --restart unless-stopped --env-file /home/ubuntu/.env rrumsey95/audio-curl-bot:latest
+    docker run -d --name audio-curl-bot --restart unless-stopped --env-file /home/ubuntu/.env rrumsey95/audio-curl-bot:latest
 
     log "Docker application setup complete."
 }
 
 running_stuff_locally() {
     git clone https://github.com/rrumsey95/Audio-Curl-Bot.git
-    sudo python3 -m venv .venv
+    python3 -m venv venv
+    python3 -m venv .venv
+    source venv/bin/activate
     source .venv/bin/activate
     log "Installing Python dependencies..."
-    sudo python3 -m pip install -r /home/ubuntu/Audio-Curl-Bot/requirements.txt
-    
-    sudo pipx install yt_dlp
-
+    python3 -m pip install -r /home/ubuntu/Audio-Curl-Bot/requirements.txt
+    pip install -U discord.py
+    pip install -U "discord.py[voice]"
+    pip install -U PyNaCl
+    pipx install yt_dlp
+    pip install -U asyncio
+    pip install -U dotenv
     log "Python dependencies installed."
     log "Making sure the python files are executable..."
     chmod +x /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
