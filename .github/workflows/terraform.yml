@@ -47,13 +47,13 @@ jobs:
 
     - name: Terraform Format
       run: terraform fmt -check
-      working-directory: ./IaC/workspace
+      working-directory: ./IaC/workspace/*
 
     - name: Terraform Plan
       run: terraform plan -input=false
-      working-directory: ./IaC
+      working-directory: ./IaC/workspace/*
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
-      working-directory: ./IaC
+      working-directory: ./IaC/workspace/*
