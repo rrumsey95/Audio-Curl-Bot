@@ -4,7 +4,7 @@
 // The S3 bucket is configured to be encrypted and has versioning enabled for state management.
 // The state.tf file is commented out due to being needed for the initial setup of the S3 bucket but not later on.
 */
-/*
+
 resource "aws_s3_bucket" "audio_curl_bot_bucket" {
   bucket = "audio-curl-bot-state-bucket"
 
@@ -53,4 +53,3 @@ resource "aws_s3_bucket_acl" "audio_curl_bot_bucket_private_acl" {
   bucket     = aws_s3_bucket.audio_curl_bot_bucket.id
   acl        = "private"
 }
-*/
