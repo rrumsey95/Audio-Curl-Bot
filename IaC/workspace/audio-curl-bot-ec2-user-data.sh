@@ -12,6 +12,13 @@ write_files() {
         exit 1
     fi
     echo "${env_file}" > /home/ubuntu/.env
+    echo "YTDLP_COOKIES=/home/ubuntu/cookies.txt" >> /home/ubuntu/.env # add path to cookies.txt to .env file
+    chmod 600 /home/ubuntu/.env
+    chown ubuntu:ubuntu /home/ubuntu/.env
+    if [[ $? -ne 0 ]]; then
+        log "Failed to write .env file. Please check permissions."
+        exit 1
+    fi
     log ".env file written successfully."
 
     log "Writing cookies.txt file..."
@@ -20,6 +27,12 @@ write_files() {
         exit 1
     fi
     echo "${cookies_file}" > /home/ubuntu/cookies.txt
+    chmod 600 /home/ubuntu/cookies.txt
+    chown ubuntu:ubuntu /home/ubuntu/cookies.txt
+    if [[ $? -ne 0 ]]; then
+        log "Failed to write cookies.txt file. Please check permissions."
+        exit 1
+    fi
     log "cookies.txt file written successfully."
 }
 
