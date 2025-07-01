@@ -4,6 +4,7 @@ resource "aws_vpc" "audio-curl-bot-vpc" {
 
   tags = {
     Name = "audio-curl-bot-vpc"
+    project = "audio-curl-bot"
   }
 }
 
@@ -15,6 +16,7 @@ resource "aws_subnet" "public_subnets" {
  
  tags = {
    Name = "Public Subnet ${count.index + 1}"
+   project = "audio-curl-bot"
  }
 }
  
@@ -26,6 +28,7 @@ resource "aws_subnet" "private_subnets" {
  
  tags = {
    Name = "Private Subnet ${count.index + 1}"
+   project = "audio-curl-bot"
  }
 }
 
@@ -40,6 +43,7 @@ resource "aws_internet_gateway" "gw" {
  
  tags = {
    Name = "Project VPC IG"
+   project = "audio-curl-bot"
  }
 }
 
@@ -53,6 +57,7 @@ resource "aws_route_table" "second_rt" {
  
  tags = {
    Name = "2nd Route Table"
+   project = "audio-curl-bot"
  }
 }
 

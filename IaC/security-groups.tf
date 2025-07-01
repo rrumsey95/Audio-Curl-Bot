@@ -6,6 +6,7 @@ resource "aws_security_group" "bot_networking" {
 
   tags = {
     Name = "bot_networking"
+    project = "audio-curl-bot"
   }
 }
 

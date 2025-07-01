@@ -13,6 +13,7 @@ resource "aws_s3_bucket" "audio_curl_bot_bucket" {
   tags = {
     Name        = "audio-curl-bot-state-bucket"
     Environment = "prod"
+    project = "audio-curl-bot"
   }
 }
 
