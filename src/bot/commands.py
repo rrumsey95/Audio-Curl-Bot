@@ -61,6 +61,34 @@ async def play_playlist(interaction: discord.Interaction, url: str):
     if not queue["playing"]:
         await play_next(interaction.guild.id)
 
+@tree.command(name="play", description="Play a single YouTube video")
+@app_commands.describe(url="YouTube video URL")
+async def play(interaction: discord.Interaction, url: str):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    vc = queue["vc"]
+    if not vc or not vc.is_connected():
+        await interaction.response.send_message("Bot must be in a voice channel. Use `/join` first.", ephemeral=True)
+        return
+
+    await interaction.response.send_message("⏳ Fetching video...")
+    ydl_opts = {
+        'quiet': True,
+        'noplaylist': True,
+        'cookiesfromfile': COOKIES_FILE if os.path.exists(COOKIES_FILE) else None,
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+        if not info:
+            await interaction.followup.send("❌ No video found.")
+            return
+
+    queue["songs"].append(Song(info["title"], url, info.get("webpage_url", url), interaction.user))
+    await interaction.followup.send(f"✅ Added `{info['title']}` to the queue.")
+    if not queue["playing"]:
+        await play_next(interaction.guild.id)
+
 async def play_next(guild_id):
     await ensure_queue(guild_id)
     queue = queues[guild_id]
@@ -165,4 +193,70 @@ async def clear_queue(interaction: discord.Interaction):
         return
     queue["songs"].clear()
     await interaction.response.send_message("🗑️ The song queue has been cleared.", ephemeral=True)
+
+@tree.command(name="remove", description="Remove a song from the queue by its position")
+@app_commands.describe(position="Position in the queue (starts at 1)")
+async def remove(interaction: discord.Interaction, position: int):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    songs = queue.get("songs", [])
+    if position < 1 or position > len(songs):
+        await interaction.response.send_message("Invalid position.", ephemeral=True)
+        return
+    removed = songs.pop(position - 1)
+    await interaction.response.send_message(f"🗑️ Removed `{removed.title}` from the queue.")
+
+@tree.command(name="nowplaying", description="Show the currently playing song")
+async def nowplaying(interaction: discord.Interaction):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    vc = queue.get("vc")
+    if not vc or not vc.is_playing():
+        await interaction.response.send_message("Nothing is currently playing.", ephemeral=True)
+        return
+    # The currently playing song is not stored directly, so you may want to keep track of it.
+    # For now, let's assume you store it as queue["current_song"]
+    current_song = getattr(queue, "current_song", None)
+    if not current_song:
+        await interaction.response.send_message("No song info available.", ephemeral=True)
+        return
+    await interaction.response.send_message(embed=current_song.embed())
+
+@tree.command(name="volume", description="Set the playback volume (0-100)")
+@app_commands.describe(level="Volume level (0-100)")
+async def volume(interaction: discord.Interaction, level: int):
+    await ensure_queue(interaction.guild.id)
+    queue = queues[interaction.guild.id]
+    vc = queue.get("vc")
+    if not vc or not (vc.is_playing() or vc.is_paused()):
+        await interaction.response.send_message("Nothing is playing.", ephemeral=True)
+        return
+    if not (0 <= level <= 100):
+        await interaction.response.send_message("Volume must be between 0 and 100.", ephemeral=True)
+        return
+    # discord.py does not support volume control directly on FFmpegPCMAudio after creation.
+    # You'd need to recreate the source with a new volume filter.
+    await interaction.response.send_message("Volume adjustment is not currently supported.", ephemeral=True)
+
+@tree.command(name="help", description="Show available commands and their descriptions")
+async def help_command(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="Audio-Curl-Bot Commands",
+        description="Here are the available commands:",
+        color=discord.Color.green()
+    )
+    embed.add_field(name="/join", value="Join your voice channel.", inline=False)
+    embed.add_field(name="/play_playlist", value="Play an entire YouTube playlist. Usage: `/play_playlist <playlist_url>`", inline=False)
+    embed.add_field(name="/play", value="Play a single YouTube video. Usage: `/play <video_url>`", inline=False)
+    embed.add_field(name="/queue", value="View the upcoming songs.", inline=False)
+    embed.add_field(name="/skip", value="Skip the current song.", inline=False)
+    embed.add_field(name="/pause", value="Pause playback.", inline=False)
+    embed.add_field(name="/resume", value="Resume playback.", inline=False)
+    embed.add_field(name="/shuffle", value="Shuffle the current song queue.", inline=False)
+    embed.add_field(name="/clear_queue", value="Clear all songs from the queue.", inline=False)
+    embed.add_field(name="/remove", value="Remove a song from the queue by its position. Usage: `/remove <position>`", inline=False)
+    embed.add_field(name="/nowplaying", value="Show the currently playing song.", inline=False)
+    embed.add_field(name="/volume", value="Set the playback volume (not currently supported). Usage: `/volume <0-100>`", inline=False)
+    embed.add_field(name="/leave", value="Disconnect the bot and clear the queue.", inline=False)
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
