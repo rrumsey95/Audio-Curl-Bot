@@ -4,6 +4,25 @@ set -euo pipefail
 
 log() { echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $*"; }
 
+# Fetch .env and cookies.txt from AWS Secrets Manager and write to files
+write_files() {
+    log "Writing .env file..."
+    if [[ -z "${env_file}" ]]; then
+        log "Error: env_file is empty. Please check your AWS Secrets Manager configuration."
+        exit 1
+    fi
+    echo "${env_file}" > /home/ubuntu/.env
+    log ".env file written successfully."
+
+    log "Writing cookies.txt file..."
+    if [[ -z "${cookies_file}" ]]; then
+        log "Error: cookies_file is empty. Please check your AWS Secrets Manager configuration."
+        exit 1
+    fi
+    echo "${cookies_file}" > /home/ubuntu/cookies.txt
+    log "cookies.txt file written successfully."
+}
+
 install_stuff() {
     log "Updating system packages..."
     sudo apt-get update -y
