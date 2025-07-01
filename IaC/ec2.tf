@@ -7,7 +7,7 @@ resource "aws_instance" "audio-curl-bot-ec2" {
   key_name = var.ec2_key_name_putty
   user_data_replace_on_change = true
   // associate_public_ip_address = true
-  // iam_instance_profile = aws_iam_instance_profile.audio-curl-bot-ec2-profile.name
+  // iam_instance_profile = aws_iam_instance_profile.audio-curl-bot-ec2-profile.name // not yet implemented
 
   tags = {
     Name = "audio-curl-bot-ec2"
