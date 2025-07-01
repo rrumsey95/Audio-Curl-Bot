@@ -87,6 +87,36 @@ To play private or age-restricted playlists, export your YouTube cookies:
 
 **Never commit your cookies file to version control.**
 
+## Using Environment Variables and YouTube Cookies with AWS Secrets Manager
+
+You can securely store your `.env` file (Discord bot token and other secrets) and your `cookies.txt` file (for YouTube login cookies) in **AWS Secrets Manager**. This is especially useful for cloud deployments (e.g., EC2) and helps keep sensitive data out of your repository.
+
+### How to Use AWS Secrets Manager
+
+1. **Store your secrets in AWS Secrets Manager:**
+   - Create a secret named (for example) `audio-curl-bot-env` for your `.env` file contents.
+   - Create a secret named (for example) `audio-curl-bot-cookies` for your `cookies.txt` contents.
+
+2. **Configure your infrastructure (e.g., Terraform, user data script) to fetch these secrets:**
+   - On instance startup, retrieve the secrets and write them to `/home/ubuntu/.env` and `/home/ubuntu/cookies.txt`.
+   - Example snippet for your EC2 user data script:
+     ```bash
+     #!/bin/bash
+     cat > /home/ubuntu/.env <<EOF
+     ${env_file}
+     EOF
+
+     cat > /home/ubuntu/cookies.txt <<EOF
+     ${cookies_file}
+     EOF
+     ```
+   - Make sure your application or Docker container uses these files as usual.
+
+3. **Set the `YTDLP_COOKIES` environment variable** (if your cookies file is not in the default location):
+   ```env
+   YTDLP_COOKIES=/home/ubuntu/cookies.txt
+   ```
+
 ## Contributing
 
 Contributions are welcome! Please see the [CONTRIBUTING.md](.github/CONTRIBUTING.md) file for guidelines on how to contribute, including how to set up your development environment, coding standards, and the pull request process.
