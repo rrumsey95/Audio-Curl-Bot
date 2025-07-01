@@ -19,5 +19,5 @@ COPY . .
 # Set environment variables (optional, can be overridden)
 ENV PYTHONUNBUFFERED=1
 
-# Command to run the bot
-CMD ["python", "Audio-Curl-Bot.py"]
+# Command to run the bot (note the src/ path)
+CMD ["python", "src/Audio-Curl-Bot.py"]

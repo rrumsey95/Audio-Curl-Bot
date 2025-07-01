@@ -100,6 +100,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 install_stuff
-# docker_app_setup
-running_stuff_locally
+docker_app_setup
+# running_stuff_locally
 log "All setup tasks completed successfully."
