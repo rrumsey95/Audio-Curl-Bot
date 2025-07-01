@@ -14,6 +14,7 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
 - Per-guild song queues
 - Error handling for voice and playback operations
 - Checks to prevent duplicate voice connections
+- **Supports YouTube login cookies** for private/age-restricted playlists (see below)
 
 ## Requirements
 
@@ -21,6 +22,7 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
 - FFmpeg (must be installed and available in your system PATH)
 - Discord bot token
 - [python-dotenv](https://pypi.org/project/python-dotenv/) (for loading environment variables)
+- (Optional) `cookies.txt` file for YouTube login cookies
 
 ## Installation
 
@@ -39,7 +41,11 @@ Audio-Curl-Bot is a Discord music bot written in Python that can join voice chan
      ```env
      DISCORD_BOT_TOKEN=your_bot_token_here
      ```
-4. **Run the bot:**
+4. **(Optional) Add YouTube cookies:**
+   - Export your YouTube cookies as `cookies.txt` (see below).
+   - Place `cookies.txt` in the same directory as your bot or set the `YTDLP_COOKIES` environment variable to its path.
+
+5. **Run the bot:**
    ```sh
    python Audio-Curl-Bot.py
    ```
@@ -67,6 +73,19 @@ Audio-Curl-Bot/
 - Use the `/play_playlist` command followed by a YouTube playlist URL to play a playlist.
 - Manage the song queue with `/queue`, `/skip`, `/pause`, `/resume`, `/shuffle`, and `/clear_queue`.
 - Use the `/leave` command to make the bot leave the voice channel and clear the queue.
+
+## Using YouTube Login Cookies
+
+To play private or age-restricted playlists, export your YouTube cookies:
+
+1. **Install a browser extension:**
+   - [Get cookies.txt](https://chrome.google.com/webstore/detail/get-cookiestxt/hnmpcagpplmpfojmgmnngilcnanddlhb) (Chrome/Edge)
+   - [cookies.txt](https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/) (Firefox)
+2. **Log in to YouTube** in your browser.
+3. **Export cookies** as `cookies.txt` using the extension.
+4. **Place `cookies.txt`** in your bot directory or set the `YTDLP_COOKIES` environment variable to its path.
+
+**Never commit your cookies file to version control.**
 
 ## Contributing
 
