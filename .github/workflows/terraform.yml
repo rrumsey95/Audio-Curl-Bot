@@ -4,11 +4,13 @@ on:
   push:
     branches: [ "main" ]
     paths:
+      - 'IaC/state/**'
       - 'IaC/workspace/**'
       - '.github/workflows/terraform.yml'
   pull_request:
     branches: [ "main" ]
     paths:
+      - 'IaC/state/**'
       - 'IaC/workspace/**'
       - '.github/workflows/terraform.yml'
 
