@@ -259,4 +259,3 @@ async def help_command(interaction: discord.Interaction):
     embed.add_field(name="/volume", value="Set the playback volume (not currently supported). Usage: `/volume <0-100>`", inline=False)
     embed.add_field(name="/leave", value="Disconnect the bot and clear the queue.", inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
-
