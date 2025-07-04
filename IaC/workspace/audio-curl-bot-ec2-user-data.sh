@@ -2,17 +2,19 @@
 
 set -euo pipefail
 
+# Simple logging function with timestamp
 log() { echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $*"; }
 
-# Fetch .env and cookies.txt from AWS Secrets Manager and write to files
+# Writes the .env and cookies.txt files from variables passed in by Terraform/user_data
 write_files() {
     log "Writing .env file..."
     if [[ -z "${env_file}" ]]; then
         log "Error: env_file is empty. Please check your AWS Secrets Manager configuration."
         exit 1
     fi
+    # Write the .env file and append the cookies path for yt-dlp
     echo "${env_file}" > /home/ubuntu/.env
-    echo "YTDLP_COOKIES=/home/ubuntu/cookies.txt" >> /home/ubuntu/.env # add path to cookies.txt to .env file
+    echo "YTDLP_COOKIES=/home/ubuntu/cookies.txt" >> /home/ubuntu/.env
     chmod 600 /home/ubuntu/.env
     chown ubuntu:ubuntu /home/ubuntu/.env
     if [[ $? -ne 0 ]]; then
@@ -26,6 +28,7 @@ write_files() {
         log "Error: cookies_file is empty. Please check your AWS Secrets Manager configuration."
         exit 1
     fi
+    # Write the cookies.txt file for yt-dlp authentication
     echo "${cookies_file}" > /home/ubuntu/cookies.txt
     chmod 600 /home/ubuntu/cookies.txt
     chown ubuntu:ubuntu /home/ubuntu/cookies.txt
@@ -36,12 +39,14 @@ write_files() {
     log "cookies.txt file written successfully."
 }
 
+# Installs all required system packages and dependencies
 install_stuff() {
     log "Updating system packages..."
     sudo apt-get update -y
     sudo apt-get upgrade -y
 
     log "Installing required packages..."
+    # Python, pip, venv, build tools, ffmpeg, Docker, Nginx, etc.
     sudo apt-get install -y python3 
     sudo apt-get install -y python3-full
     sudo apt-get install -y python3-dev
@@ -60,19 +65,22 @@ install_stuff() {
     sudo apt-get install -y git
     sudo apt-get install -y software-properties-common 
 
+    # Additional libraries for Python packages (discord.py[voice], etc.)
     sudo apt install -y libffi-dev 
     sudo apt install -y libnacl-dev 
     sudo apt install -y libssl-dev
+    # Add deadsnakes PPA for newer Python versions if needed
     sudo add-apt-repository -y ppa:deadsnakes/ppa
     sudo apt install python3.8 python3.8-dev python3.8-venv python3-pip -y
 
-    log "Installing Certbot..."
+    log "Installing Certbot for SSL (optional, for Nginx)..."
     sudo apt-get install -y certbot 
     sudo apt-get install -y python3-certbot-nginx
 
     log "Enabling and starting Docker and Nginx..."
     sudo systemctl enable docker
     sudo systemctl start docker
+    # Uncomment below if you want Nginx to run by default
     # sudo systemctl enable nginx
     # sudo systemctl start nginx
 
@@ -85,6 +93,7 @@ install_stuff() {
     log "For Nginx, you can find the configuration files in /etc/nginx/nginx.conf and /etc/nginx/sites-available/"
 }
 
+# Pulls the latest Docker image and starts the bot container
 docker_app_setup() {
     log "Pulling latest Audio-Curl-Bot Docker image..."
     docker pull rrumsey95/audio-curl-bot:latest
@@ -95,11 +104,13 @@ docker_app_setup() {
     fi
 
     log "Starting Audio-Curl-Bot container..."
+    # --env-file passes the .env file to the container
     docker run -d --name audio-curl-bot --restart unless-stopped --env-file /home/ubuntu/.env rrumsey95/audio-curl-bot:latest
 
     log "Docker application setup complete."
 }
 
+# (Optional) For running the bot directly on the EC2 instance, not in Docker
 running_stuff_locally() {
     git clone https://github.com/rrumsey95/Audio-Curl-Bot.git
     python3 -m venv venv
@@ -125,13 +136,22 @@ running_stuff_locally() {
     python3 /home/ubuntu/Audio-Curl-Bot/src/Audio-Curl-Bot.py
 }
 
-# Main
+# Main script logic
 if [[ $EUID -ne 0 ]]; then
     log "Please run as root or with sudo."
     exit 1
 fi
 
+# Install system dependencies
 install_stuff
+
+# Pull secrets from AWS and write to files
+write_files
+
+# Start the Docker container (comment out if running locally)
 docker_app_setup
+
+# Uncomment below to run the bot directly on the EC2 instance (not in Docker)
 # running_stuff_locally
+
 log "All setup tasks completed successfully."
